@@ -1,10 +1,11 @@
 <template>
   <div>
     <ul class="list-group">
-      <li class="list-group-item" v-for="(product,id) in products" :key="id">
+      <li class="list-group-item" v-for="(product,id) in filteredProducts" :key="id">
         {{ `${product.name} Quantity : ${product.quantity}` }}
       </li>
     </ul>
+    <input type="text" placeholder="Search.." v-model="term">
   </div>
 </template>
 
@@ -14,7 +15,16 @@ import { productService } from '../services/ProductService'
 export default {
   data() {
     return {
-      products : productService.list()
+      products : productService.list(),
+      term : ''
+    }
+  },
+
+  computed : {
+    filteredProducts() {
+      return this.products.filter(product => {
+        return product.name.toLowerCase().includes(this.term.toLowerCase())
+      })
     }
   }
 }
